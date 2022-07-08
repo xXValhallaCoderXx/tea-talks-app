@@ -71,3 +71,10 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+## DB
+
+- list databases \l
+- Connect to db \c teatalk
+- List tables \dt
