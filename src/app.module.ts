@@ -1,11 +1,10 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth2/auth.module';
 import { logger } from './middleware/logger.middleware';
 
 @Module({
@@ -23,9 +22,10 @@ import { logger } from './middleware/logger.middleware';
     }),
     CatsModule,
     UsersModule,
+    AuthModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
