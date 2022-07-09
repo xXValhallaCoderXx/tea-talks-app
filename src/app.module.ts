@@ -7,7 +7,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { logger } from './middleware/logger.middleware';
 
-import { TestController } from './modules/test.module';
 
 /*
 imports: Other modules that are needed by this module.
@@ -20,24 +19,20 @@ providers:in simple terms, all our services and providers within the module will
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // SequelizeModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => ({
-    //     dialect: 'postgres',
-    //     autoLoadModels: true,
-    //     synchronize: true,
-    //     host: configService.get<string>('DB_HOST'),
-    //     port: parseInt(configService.get<string>('DB_PORT')) || 3000,
-    //     username: configService.get<string>('DB_USERNAME'),
-    //     password: configService.get<string>('DB_PASSWORD'),
-    //     database: configService.get<string>('DB_NAME'),
-    //   }),
-    // }),
-    // UsersModule,
-    // AuthModule,
-    // PostsModule,
+    SequelizeModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        dialect: 'postgres',
+        autoLoadModels: true,
+        synchronize: true,
+        uri: configService.get<string>('DATABASE_URL'),
+      }),
+    }),
+    UsersModule,
+    AuthModule,
+    PostsModule,
   ],
-  controllers: [TestController],
+  controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
