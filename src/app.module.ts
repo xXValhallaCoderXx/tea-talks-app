@@ -8,6 +8,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { logger } from './middleware/logger.middleware';
 
+
+
 /*
 imports: Other modules that are needed by this module.
 exports: By default, modules encapsulate providers. It’s impossible to inject providers that are neither directly part of the current module nor are exported from the imported modules. To make the current module providers available to other modules in the application, they have to be exported here. We can also export modules we imported too.
