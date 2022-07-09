@@ -1,5 +1,5 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 import { CatsModule } from './modules/cats/cats.module';
@@ -19,15 +19,18 @@ providers:in simple terms, all our services and providers within the module will
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      autoLoadModels: true,
-      synchronize: true,
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT) || 3000,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+    SequelizeModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        dialect: 'postgres',
+        autoLoadModels: true,
+        synchronize: true,
+        host: configService.get<string>('DB_HOST'),
+        port: parseInt(configService.get<string>('DB_PORT')) || 3000,
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+      }),
     }),
     CatsModule,
     UsersModule,
