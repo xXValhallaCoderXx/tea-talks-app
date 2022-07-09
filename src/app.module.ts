@@ -23,6 +23,12 @@ providers:in simple terms, all our services and providers within the module will
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         dialect: 'postgres',
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false
+          }
+        },
         autoLoadModels: true,
         synchronize: true,
         uri: process.env.DATABASE_URL,
