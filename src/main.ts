@@ -17,6 +17,8 @@ async function bootstrap() {
     }),
   );
   // app.use(logger);
-  await app.listen(PORT || 3000);
+  app.listen(process.env.PORT, '0.0.0.0', () => {
+    console.log("Server is running.");
+  });
 }
 bootstrap();
