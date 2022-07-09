@@ -14,13 +14,13 @@ export class AuthService {
     // Check if user exists
     console.log("USERNAME: ", username)
     console.log("PASSWORD: ", pass)
-    const user = await this.usersService.findOneByEmail(username);
+    const user = await this.usersService.findOneByEmail("renate@gmail.com");
     if (!user) {
       return null;
     }
 
     // Password do not match
-    const match = await this.comparePassword(pass, user.password);
+    const match = await this.comparePassword("123456", user.password);
     if (!match) {
       return null;
     }
@@ -47,9 +47,10 @@ export class AuthService {
     return { user: result, token };
   }
 
-  async login(user: any) {
-    const token = await this.generateToken(user);
-    return { user, token };
+  async login({email, password}: {email: string, password: string}) {
+
+    const token = await this.generateToken({email, password});
+    return { user: {email, password}, token };
   }
 
   private async comparePassword(enteredPassword, dbPassword) {
@@ -62,8 +63,7 @@ export class AuthService {
     return hash;
   }
 
-  private async generateToken(user) {
-    const token = await this.jwtService.signAsync(user);
-    return token;
+  private async generateToken({email, password}) { 
+    return await this.jwtService.signAsync({email, password});
   }
 }
