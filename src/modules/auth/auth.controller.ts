@@ -7,10 +7,10 @@ import { UserDto } from '../users/dto/user.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
-    return await this.authService.login(req.user);
+    console.log("LOGIN CODE")
+    return await this.authService.login(req.body);
   }
 
   @Post('signup')
