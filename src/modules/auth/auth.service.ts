@@ -1,7 +1,11 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable } from '@nestjs/common';
+import { Injectable,UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/modules/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+
+interface IJWTPayload {
+  id: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -10,17 +14,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string) {
+  async validateUser(email: string, pass: string) {
     // Check if user exists
-    console.log("USERNAME: ", username)
-    console.log("PASSWORD: ", pass)
-    const user = await this.usersService.findOneByEmail("renate@gmail.com");
+    const user = await this.usersService.findOneByEmail(email);
     if (!user) {
       return null;
     }
 
     // Password do not match
-    const match = await this.comparePassword("123456", user.password);
+    const match = await this.comparePassword(pass, user.password);
     if (!match) {
       return null;
     }
@@ -49,7 +51,14 @@ export class AuthService {
 
   async login({email, password}: {email: string, password: string}) {
 
-    const token = await this.generateToken({email, password});
+    const validateUser = await this.validateUser(email, password);
+
+    if(validateUser === null){
+      throw new UnauthorizedException(
+        'Invalid email or password',
+      );
+    }
+    const token = await this.generateToken(validateUser.id);
     return { user: {email}, token };
   }
 
@@ -63,7 +72,7 @@ export class AuthService {
     return hash;
   }
 
-  private async generateToken({email, password}) { 
-    return await this.jwtService.signAsync({email, password});
+  private async generateToken(id) { 
+    return await this.jwtService.signAsync({id});
   }
 }

@@ -13,7 +13,8 @@ export class PostsService {
   private readonly posts: Post[] = [];
 
   async create(post: PostDto, userId): Promise<Post> {
-    return await this.postModel.create<Post>(post);
+
+    return await this.postModel.create<Post>({...post, userId});
   }
 
   async findAll(): Promise<Post[]> {
