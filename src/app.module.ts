@@ -4,7 +4,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 
 import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth2/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { logger } from './middleware/logger.middleware';
 
 @Module({
@@ -22,7 +22,7 @@ import { logger } from './middleware/logger.middleware';
     }),
     CatsModule,
     UsersModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [],
   providers: [],

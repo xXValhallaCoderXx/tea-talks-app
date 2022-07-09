@@ -22,6 +22,10 @@ export class UsersService {
   }
 
   async create(user: User): Promise<User> {
+    const checkUserExists = await this.findOneByEmail(user.email);
+    if(checkUserExists){
+      return checkUserExists;
+    }
     return await this.userModel.create<User>(user);
   }
 

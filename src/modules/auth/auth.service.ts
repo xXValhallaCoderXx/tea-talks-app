@@ -1,36 +1,35 @@
-import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UsersService,
-    private readonly jwtService: JwtService,
+    private usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   async validateUser(username: string, pass: string) {
     // find if user exist with this email
-    const user = await this.userService.findOneByEmail(username);
+    const user = await this.usersService.findOneByEmail(username);
     if (!user) {
-      return null;
+      return { data: 'Not found' };
     }
 
+    console.log('PASS: ', pass);
+    console.log('USER PASS: ', user.password);
     // find if user password match
     const match = await this.comparePassword(pass, user.password);
+    console.log('match:', match);
     if (!match) {
-      return null;
+      return { data: 'Password no' };
     }
+    console.log('Password: ', match);
 
     // tslint:disable-next-line: no-string-literal
     const { password, ...result } = user['dataValues'];
     return result;
-  }
-
-  public async login(user) {
-    const token = await this.generateToken(user);
-    return { user, token };
   }
 
   public async create(user) {
@@ -38,11 +37,12 @@ export class AuthService {
     const pass = await this.hashPassword(user.password);
 
     // create the user
-    const newUser = await this.userService.create({ ...user, password: pass });
+    console.log("user: ", user)
+    const newUser = await this.usersService.create({ ...user, password: pass });
 
     // tslint:disable-next-line: no-string-literal
     const { password, ...result } = newUser['dataValues'];
-
+    console.log("DONE")
     // generate token
     const token = await this.generateToken(result);
 
@@ -50,9 +50,16 @@ export class AuthService {
     return { user: result, token };
   }
 
-  private async generateToken(user) {
-    const token = await this.jwtService.signAsync(user);
-    return token;
+  async login(user: any) {
+    const payload = { username: user.username, sub: user.userId };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  private async comparePassword(enteredPassword, dbPassword) {
+    const match = await bcrypt.compare(enteredPassword, dbPassword);
+    return match;
   }
 
   private async hashPassword(password) {
@@ -60,8 +67,8 @@ export class AuthService {
     return hash;
   }
 
-  private async comparePassword(enteredPassword, dbPassword) {
-    const match = await bcrypt.compare(enteredPassword, dbPassword);
-    return match;
+  private async generateToken(user) {
+    const token = await this.jwtService.signAsync(user);
+    return token;
   }
 }
