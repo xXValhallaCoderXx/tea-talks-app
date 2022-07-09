@@ -19,18 +19,18 @@ providers:in simple terms, all our services and providers within the module will
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    SequelizeModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        dialect: 'postgres',
-        autoLoadModels: true,
-        synchronize: true,
-        uri: configService.get<string>('DATABASE_URL'),
-      }),
-    }),
-    UsersModule,
-    AuthModule,
-    PostsModule,
+    // SequelizeModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => ({
+    //     dialect: 'postgres',
+    //     autoLoadModels: true,
+    //     synchronize: true,
+    //     uri: configService.get<string>('DATABASE_URL'),
+    //   }),
+    // }),
+    // UsersModule,
+    // AuthModule,
+    // PostsModule,
   ],
   controllers: [],
   providers: [],
