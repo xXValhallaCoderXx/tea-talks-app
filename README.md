@@ -78,3 +78,27 @@ Nest is [MIT licensed](LICENSE).
 - list databases \l
 - Connect to db \c teatalk
 - List tables \dt
+
+
+## Providers
+Providers were designed to abstract any form of complexity and logic to a separate class. A provider can be a service, a repository, a factory, or a helper.
+A good use case for a service provider is to create a PostService that abstracts all communication to the database into this service. This keeps the PostsController nice and clean.
+
+## Interceptors
+An interceptor is a specialised set of middleware that lets you peek into the request that goes into the application. You can peek into the request either before it reaches the controller or after the controller is done with the request before it gets to the client-side as a response. You can manipulate the data on their way out in the interceptor
+
+### Guard
+Guard is also a special kind of middleware that is used mainly for authentication and authorisation. It only returns a boolean value of true or false.
+
+Guards have a single responsibility: they determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc.) present at run-time.
+
+A Guard should also implement the CanActivate interface.
+
+
+### Pipe
+Pipes are also a special kind of middleware that sits between the client and the controller. They are mostly used for validation and transforming data before they get to the controller.
+
+### DTO
+Data transfer object is an object that defines how data will be sent over the network. They are also used for validation and type checking.
+
+### Interface only for type checking

@@ -7,13 +7,15 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from './local.strategy';
 
+console.log("PROPCES: ", process.env.JWTKEY)
+
 @Module({
   imports: [
-    UsersModule,
     PassportModule,
+    UsersModule,
     JwtModule.register({
-      secret: "123456",
-      signOptions: { expiresIn: '60s' },
+      secret: process.env.JWTKEY,
+      signOptions: { expiresIn: process.env.TOKEN_EXPIRATION  },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

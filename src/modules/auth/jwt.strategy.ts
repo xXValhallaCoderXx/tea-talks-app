@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validat2e(payload: any) {
+  async validate(payload: any) {
     // check if user in the token actually exist
     const user = await this.userService.findOneById(payload.id);
     if (!user) {
@@ -22,9 +22,5 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       );
     }
     return payload;
-  }
-
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
   }
 }

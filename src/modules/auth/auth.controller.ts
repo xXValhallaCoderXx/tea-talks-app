@@ -7,18 +7,14 @@ import { UserDto } from '../users/dto/user.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-
-  
-  // @UseGuards(AuthGuard('local'))
+  @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Body() params) {
-
-    console.log("PARAMS: ", params)
-    return await this.authService.validateUser(params.email, params.password);
+  async login(@Request() req) {
+    return await this.authService.login(req.user);
   }
 
   @Post('signup')
   async signUp(@Body() user: UserDto) {
-      return await this.authService.create(user);
+    return await this.authService.create(user);
   }
 }
