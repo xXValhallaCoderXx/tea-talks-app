@@ -50,7 +50,7 @@ export class AuthService {
   async login({email, password}: {email: string, password: string}) {
 
     const token = await this.generateToken({email, password});
-    return { user: {email, password}, token };
+    return { user: {email}, token };
   }
 
   private async comparePassword(enteredPassword, dbPassword) {
