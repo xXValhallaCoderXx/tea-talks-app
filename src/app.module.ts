@@ -2,7 +2,6 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
@@ -34,7 +33,6 @@ providers:in simple terms, all our services and providers within the module will
         database: configService.get<string>('DB_NAME'),
       }),
     }),
-    CatsModule,
     UsersModule,
     AuthModule,
     PostsModule,
