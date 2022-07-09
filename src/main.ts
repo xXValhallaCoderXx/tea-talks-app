@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -7,7 +7,12 @@ async function bootstrap() {
   const PORT = process.env.PORT || 3000;
 
   // handle all user input validation globally
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      exceptionFactory: (errors) => new BadRequestException(errors),
+    }),
+  );
   // app.use(logger);
   await app.listen(PORT);
 }
